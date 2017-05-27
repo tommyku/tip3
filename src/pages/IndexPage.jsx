@@ -4,6 +4,21 @@ import { Link } from 'react-router-dom';
 import AutoLinkText from 'react-autolink-text2';
 import AppBar from '../components/AppBar'
 
+const mainStyle = {
+  padding: '.5em'
+}
+
+const buttonStyle = {
+  display: 'block',
+  width: '100%'
+}
+
+const itemStyle = {
+  margin: 0,
+  padding: '1em',
+  borderBottom: '1px solid #999'
+}
+
 class IndexPage extends PureComponent {
   handleButtonLoadMoreClick(e) {
     this.context.handler({action: 'loadmore'});
@@ -23,6 +38,7 @@ class IndexPage extends PureComponent {
 
     const buttonLoadMore = (
       <button type='button'
+        style={buttonStyle}
         disabled={!hasMore}
         onClick={e => this.handleButtonLoadMoreClick(e)}>
         {(hasMore) ? '更多' : '無喇'}
@@ -30,7 +46,7 @@ class IndexPage extends PureComponent {
     );
 
     const Item = ({text})=> (
-      <p>
+      <p style={itemStyle}>
         <AutoLinkText text={text} />
       </p>
     );
@@ -53,7 +69,7 @@ class IndexPage extends PureComponent {
       <div>
         <AppBar title='貼三'
           afterTitleNode={buttonAdd} />
-        <main>
+        <main style={mainStyle}>
           <ItemList items={items} />
           {buttonLoadMore}
         </main>
