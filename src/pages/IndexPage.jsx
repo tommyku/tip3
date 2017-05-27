@@ -3,12 +3,6 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 class IndexPage extends PureComponent {
-  componentDidMount() {
-    if (!this.context.login) {
-      this.context.history.replace('/')
-    }
-  }
-
   handleButtonLoadMoreClick(e) {
     console.log(e);
   }
@@ -45,7 +39,6 @@ class IndexPage extends PureComponent {
 
 IndexPage.contextTypes = {
   hoodie: PropTypes.object,
-  login: PropTypes.bool,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,

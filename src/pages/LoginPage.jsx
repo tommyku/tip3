@@ -4,9 +4,17 @@ import logo from '../icon-512x512.png'
 
 class LoginPage extends PureComponent {
   handleButtonSubmitClick(e) {
-    const hoodieHost = this.refs['inputHoodieHost'].value;
+    const host = this.refs['inputHoodieHost'].value;
     const username = this.refs['inputUsername'].value;
     const password = this.refs['inputPassword'].value;
+    this.context.handler({
+      action: 'signin',
+      payload: {
+        host: host,
+        username: username,
+        password: password
+      }
+    })
   }
 
   render() {
@@ -16,6 +24,7 @@ class LoginPage extends PureComponent {
         <input id='inputHoodieHost'
           ref='inputHoodieHost'
           type='url'
+          defaultValue='https://hoodie.tommyku.com'
           placeholder='e.g. https://hoodie.on9'
           autoComplete='false'
           autoCapitalize='false' />
@@ -69,6 +78,10 @@ class LoginPage extends PureComponent {
       </div>
     );
   }
+}
+
+LoginPage.contextTypes = {
+  handler: PropTypes.func.isRequired
 }
 
 export default LoginPage;
