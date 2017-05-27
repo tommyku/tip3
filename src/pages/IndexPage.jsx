@@ -16,7 +16,8 @@ const buttonStyle = {
 const itemStyle = {
   margin: 0,
   padding: '1em',
-  borderBottom: '1px solid #999'
+  borderBottom: '1px solid #999',
+  whiteSpace: 'pre'
 }
 
 class IndexPage extends PureComponent {
