@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import logo from '../icon-512x512.png'
+import logo from '../icon-192x192.png'
 
 class LoginPage extends PureComponent {
   handleButtonSubmitClick(e) {
