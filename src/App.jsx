@@ -177,7 +177,8 @@ class App extends Component {
 
     const renderIndexPage = ()=> (
       (this.state.login) ? (
-        <IndexPage items={this.state.itemsToShow} />
+        <IndexPage items={this.state.itemsToShow}
+          hasMore={this.state.lastItemId !== 0} />
       ) : (
         <Redirect to='/' />
       )

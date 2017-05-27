@@ -10,7 +10,8 @@ class IndexPage extends PureComponent {
 
   render() {
     const {
-      items
+      items,
+      hasMore
     } = this.props;
 
     const buttonAdd = (
@@ -21,8 +22,9 @@ class IndexPage extends PureComponent {
 
     const buttonLoadMore = (
       <button type='button'
+        disabled={!hasMore}
         onClick={e => this.handleButtonLoadMoreClick(e)}>
-        更多
+        {(hasMore) ? '更多' : '無喇'}
       </button>
     );
 
