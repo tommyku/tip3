@@ -55,6 +55,11 @@ class App extends Component {
       this.setState({login: true}, ()=> history.push('/index'));
     }
 
+    const unAuthenticateHandler = (account)=> {
+      localStorage.setItem('hoodieHost', this.state.hoodieHost);
+      this.setState({login: false});
+    }
+
     const storeOnChange = (event, object)=> {
       switch (event) {
         case 'add':
@@ -66,6 +71,8 @@ class App extends Component {
       }
     }
 
+    this.state.hoodie.account.on('unauthenticate', unAuthenticateHandler);
+    this.state.hoodie.account.on('signout', unAuthenticateHandler);
     this.state.hoodie.account.on('reauthenticate', signInReAuthenticateHandler);
     this.state.hoodie.account.on('signin', signInReAuthenticateHandler);
     this.state.hoodie.store.on('change', storeOnChange);
