@@ -7,6 +7,7 @@ import {
   Redirect
 } from 'react-router-dom';
 import createHashHistory from 'history/createHashHistory';
+import Paste from './data/Paste'
 import LoginPage from './pages/LoginPage'
 import IndexPage from './pages/IndexPage'
 import AddPage from './pages/AddPage'
@@ -18,9 +19,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     const defaultState = {
-      itemUuids: [],
-      items: {},
-      lastItem: '',
+      itemIds: [],
+      itemsToShow: [],
+      lastItemId: 0,
       login: false,
       hoodieHost: '',
       hoodie: null
@@ -36,6 +37,12 @@ class App extends Component {
         this.setUpHoodieClient({callback: ()=> {
           this.state.hoodie.account.get('session').then((session)=> {
             this.setState({login: (session ? true : false)});
+            if (session) {
+              this.state.hoodie.store.find('tip3-itemIds').then((object)=> {
+                let lastItemId = Math.max(0, object.ids.length - 11);
+                this.setState({itemIds: object.ids, lastItemId: lastItemId}, ()=> this.fetchItems());
+              });
+            }
           });
         }});
       });
@@ -48,8 +55,47 @@ class App extends Component {
       this.setState({login: true}, ()=> history.push('/index'));
     }
 
+    const storeOnChange = (event, object)=> {
+      switch (event) {
+        case 'add':
+          this.hoodieHandleAdd(object);
+          break;
+        case 'update':
+          this.hoodieHandleUpdate(object);
+          break;
+      }
+    }
+
     this.state.hoodie.account.on('reauthenticate', signInReAuthenticateHandler);
     this.state.hoodie.account.on('signin', signInReAuthenticateHandler);
+    this.state.hoodie.store.on('change', storeOnChange);
+  }
+
+  hoodieHandleAdd(object) {
+    //let pasteRegexp = /tip3-[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/i
+    let itemIdsRegexp = 'tip3-itemIds'
+    if (object._id.match(itemIdsRegexp)) {
+      this.setState({itemIds: object.ids}, ()=> {
+        this.fetchItems();
+      });
+    }
+  }
+
+  hoodieHandleUpdate(object) {
+    let itemIdsRegexp = 'tip3-itemIds'
+    if (object._id.match(itemIdsRegexp)) {
+      this.setState({itemIds: object.ids}, ()=> {
+        this.fetchItems();
+      });
+    }
+  }
+
+  fetchItems() {
+    const idsToFetch = this.state.itemIds.slice(this.state.lastItemId, this.state.itemIds.length).reverse();
+    this.state.hoodie.store.find(idsToFetch).then((objects)=> {
+      let newItemsToShow = objects.map(item => new Paste(item));
+      this.setState({itemsToShow: newItemsToShow});
+    }).catch(console.warn);
   }
 
   setUpHoodieClient({callback}) {
@@ -60,6 +106,13 @@ class App extends Component {
     this.setState({hoodie: hoodie}, ()=> {
       this.setUpHoodieListners();
       if (typeof callback === 'function') callback();
+    });
+  }
+
+  handleLoadItem() {
+    let newLastItemId = Math.max(0, this.state.lastItemId - 10);
+    this.setState({lastItemId: newLastItemId}, ()=> {
+      this.fetchItems();
     });
   }
 
@@ -76,10 +129,24 @@ class App extends Component {
     });
   }
 
+  handleNewPaste({value}) {
+    let newItemIds = this.state.itemIds;
+    let newPaste = new Paste({value: value});
+    newItemIds.push(newPaste._id);
+    this.state.hoodie.store.add(newPaste.serialize());
+    this.state.hoodie.store.updateOrAdd('tip3-itemIds', {ids: newItemIds});
+  }
+
   handler({action, payload}) {
     switch (action) {
       case 'signin':
         this.handleSignIn(payload);
+        break;
+      case 'loadmore':
+        this.handleLoadItem();
+        break;
+      case 'newpaste':
+        this.handleNewPaste(payload);
         break;
     }
   }
@@ -93,9 +160,17 @@ class App extends Component {
   }
 
   render() {
+    const renderAddPage = ()=> (
+      (this.state.login) ? (
+        <AddPage />
+      ) : (
+        <Redirect to='/' />
+      )
+    );
+
     const renderIndexPage = ()=> (
       (this.state.login) ? (
-        <IndexPage />
+        <IndexPage items={this.state.itemsToShow} />
       ) : (
         <Redirect to='/' />
       )
@@ -114,7 +189,7 @@ class App extends Component {
         <div>
           <Route exact path="/" render={renderLoginPage} />
           <Route exact path="/index" render={renderIndexPage} />
-          <Route exact path="/add" component={AddPage} />
+          <Route exact path="/add" render={renderAddPage} />
         </div>
       </Router>
     );

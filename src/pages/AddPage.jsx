@@ -4,6 +4,10 @@ import AppBar from '../components/AppBar';
 
 class AddPage extends Component {
   handleButtonSubmitClick(e) {
+    const value = this.refs['textareaContent'].value.trim();
+    if (value.length > 0) {
+      this.context.handler({action: 'newpaste', payload: {value: value}});
+    }
   }
 
   render() {
@@ -48,6 +52,7 @@ class AddPage extends Component {
 }
 
 AddPage.contextTypes = {
+  handler: PropTypes.func.isRequired,
   history: PropTypes.shape({
     go: PropTypes.func.isRequired
   })

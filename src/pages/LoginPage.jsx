@@ -24,7 +24,6 @@ class LoginPage extends PureComponent {
         <input id='inputHoodieHost'
           ref='inputHoodieHost'
           type='url'
-          defaultValue='https://hoodie.tommyku.com'
           placeholder='e.g. https://hoodie.on9'
           autoComplete='false'
           autoCapitalize='false' />
