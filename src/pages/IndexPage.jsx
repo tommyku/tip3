@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import AutoLinkText from 'react-autolink-text2';
+import AppBar from '../components/AppBar'
 
 class IndexPage extends PureComponent {
   handleButtonLoadMoreClick(e) {
@@ -50,12 +51,8 @@ class IndexPage extends PureComponent {
 
     return (
       <div>
-        <header>
-          <h1>
-            貼三
-            {buttonAdd}
-          </h1>
-        </header>
+        <AppBar title='貼三'
+          afterTitleNode={buttonAdd} />
         <main>
           <ItemList items={items} />
           {buttonLoadMore}

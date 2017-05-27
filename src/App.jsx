@@ -11,9 +11,13 @@ import Paste from './data/Paste'
 import LoginPage from './pages/LoginPage'
 import IndexPage from './pages/IndexPage'
 import AddPage from './pages/AddPage'
-import './App.css';
 
 const history = createHashHistory();
+
+const colorScheme = {
+  primary: '#8bc34a',
+  primaryText: '#ffffff'
+};
 
 class App extends Component {
   constructor(props) {
@@ -162,7 +166,8 @@ class App extends Component {
     return {
       history: history,
       hoodie: this.state.hoodie,
-      handler: this.handler.bind(this)
+      handler: this.handler.bind(this),
+      colorScheme: colorScheme
     }
   }
 
@@ -211,7 +216,11 @@ App.childContextTypes = {
     replace: PropTypes.func.isRequired,
     go: PropTypes.func.isRequired
   }),
-  handler: PropTypes.func
+  handler: PropTypes.func,
+  colorScheme: PropTypes.shape({
+    primary: PropTypes.string.isRequired,
+    primaryText: PropTypes.string.isRequired
+  })
 };
 
 export default App;

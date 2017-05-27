@@ -14,10 +14,9 @@ class AddPage extends Component {
 
   render() {
     const buttonAdd = (
-      <button type=''
-        onClick={e => { this.context.history.go(-1) }}>
+      <a href='' onClick={e => { this.context.history.go(-1) }}>
         返回
-      </button>
+      </a>
     );
 
     const textareaContent = (
@@ -42,8 +41,7 @@ class AddPage extends Component {
 
     return (
       <div>
-        <AppBar title={'貼三'}
-          beforeTitleNode={buttonAdd} />
+        <AppBar beforeTitleNode={buttonAdd} />
         <main>
           {textareaContent}
           {buttonSubmit}
