@@ -7,6 +7,8 @@ class AddPage extends Component {
     const value = this.refs['textareaContent'].value.trim();
     if (value.length > 0) {
       this.context.handler({action: 'newpaste', payload: {value: value}});
+      this.refs['textareaContent'].value = '';
+      this.context.history.replace('/index');
     }
   }
 
@@ -54,7 +56,8 @@ class AddPage extends Component {
 AddPage.contextTypes = {
   handler: PropTypes.func.isRequired,
   history: PropTypes.shape({
-    go: PropTypes.func.isRequired
+    go: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired
   })
 };
 
