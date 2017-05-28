@@ -28,7 +28,8 @@ class App extends Component {
       lastItemId: 0,
       login: false,
       hoodieHost: '',
-      hoodie: null
+      hoodie: null,
+      loading: false
     };
 
     this.state = defaultState;
@@ -43,7 +44,7 @@ class App extends Component {
             this.setState({login: (session ? true : false)});
             if (session) {
               this.state.hoodie.store.find('tip3-itemIds').then((object)=> {
-                let lastItemId = Math.max(0, object.ids.length - 11);
+                let lastItemId = Math.max(0, object.ids.length - 1 - this.LOAD_SIZE);
                 this.setState({itemIds: object.ids, lastItemId: lastItemId}, ()=> this.fetchItems());
               });
             }
@@ -102,11 +103,17 @@ class App extends Component {
   }
 
   fetchItems() {
+    this.setState({loading: true});
     const idsToFetch = this.state.itemIds.slice(this.state.lastItemId, this.state.itemIds.length).reverse();
-    this.state.hoodie.store.find(idsToFetch).then((objects)=> {
-      let newItemsToShow = objects.map(item => new Paste(item));
-      this.setState({itemsToShow: newItemsToShow});
-    }).catch(console.warn);
+    this.state.hoodie.store.find(idsToFetch)
+      .then((objects)=> {
+        let newItemsToShow = objects.map(item => new Paste(item));
+        this.setState({itemsToShow: newItemsToShow});
+      })
+      .catch(console.warn)
+      .then(()=> {
+        this.setState({loading: false});
+      });
   }
 
   setUpHoodieClient({callback}) {
@@ -121,7 +128,7 @@ class App extends Component {
   }
 
   handleLoadItem() {
-    let newLastItemId = Math.max(0, this.state.lastItemId - 10);
+    let newLastItemId = Math.max(0, this.state.lastItemId - this.LOAD_SIZE);
     this.setState({lastItemId: newLastItemId}, ()=> {
       this.fetchItems();
     });
@@ -183,6 +190,7 @@ class App extends Component {
     const renderIndexPage = ()=> (
       (this.state.login) ? (
         <IndexPage items={this.state.itemsToShow}
+          loading={this.state.loading}
           hasMore={this.state.lastItemId !== 0} />
       ) : (
         <Redirect to='/' />
@@ -208,6 +216,8 @@ class App extends Component {
     );
   }
 }
+
+App.prototype.LOAD_SIZE = 10;
 
 App.childContextTypes = {
   hoodie: PropTypes.object,

@@ -30,6 +30,7 @@ class IndexPage extends PureComponent {
   render() {
     const {
       items,
+      loading,
       hasMore
     } = this.props;
 
@@ -44,7 +45,7 @@ class IndexPage extends PureComponent {
         style={buttonStyle}
         disabled={!hasMore}
         onClick={e => this.handleButtonLoadMoreClick(e)}>
-        {(hasMore) ? '更多' : '無喇'}
+        {(loading) ? '等陣' : (hasMore) ? '更多' : '無喇'}
       </button>
     );
 
