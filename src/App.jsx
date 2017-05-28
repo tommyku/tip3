@@ -150,8 +150,17 @@ class App extends Component {
   handleNewPaste({value}) {
     let newItemIds = this.state.itemIds;
     let newPaste = new Paste({value: value});
+    let itemIdsToRemove = [];
+    if (newItemIds.length >= this.MAX_PASTE) {
+      let tailIndex = newItemIds.length;
+      let headIndex = Math.max(1, tailIndex - this.MAX_PASTE);
+      itemIdsToRemove = newItemIds.slice(0, headIndex);
+      newItemIds = newItemIds.slice(headIndex, tailIndex);
+    }
     newItemIds.push(newPaste._id);
     this.state.hoodie.store.add(newPaste.serialize());
+    console.log(itemIdsToRemove);
+    this.state.hoodie.store.remove(itemIdsToRemove).then(console.log).catch(console.warn);
     this.state.hoodie.store.updateOrAdd('tip3-itemIds', {ids: newItemIds});
   }
 
@@ -218,6 +227,7 @@ class App extends Component {
 }
 
 App.prototype.LOAD_SIZE = 10;
+App.prototype.MAX_PASTE = 500;
 
 App.childContextTypes = {
   hoodie: PropTypes.object,
