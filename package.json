@@ -12,7 +12,7 @@
     "react-router-dom": "^4.1.1",
     "uuid": "^3.0.1"
   },
-  "homepage": "https://tommyku.github.io/tip3",
+  "homepage": "https://tip3.ck2ustudio.com/",
   "devDependencies": {
     "gh-pages": "^1.0.0",
     "react-scripts": "1.0.6"
