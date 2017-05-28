@@ -8,9 +8,11 @@ const mainStyle = {
   padding: '.5em'
 }
 
-const buttonStyle = {
+const buttonBaseStyle = {
   display: 'block',
-  width: '100%'
+  width: '100%',
+  padding: '.5em 0',
+  marginTop: '1em'
 }
 
 const itemStyle = {
@@ -33,6 +35,17 @@ class IndexPage extends PureComponent {
       loading,
       hasMore
     } = this.props;
+
+    const { primary } = this.context.colorScheme;
+
+    const buttonStyle = Object.assign(
+      {
+        color: primary,
+        border: `1px solid ${primary}`,
+        backgroundColor: 'transparent',
+      },
+      buttonBaseStyle
+    );
 
     const buttonAdd = (
       <Link to='/add'>
@@ -84,6 +97,9 @@ class IndexPage extends PureComponent {
 
 IndexPage.contextTypes = {
   hoodie: PropTypes.object,
+  colorScheme: PropTypes.shape({
+    primary: PropTypes.string.isRequired,
+  }),
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
