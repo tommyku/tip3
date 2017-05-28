@@ -62,8 +62,21 @@ class IndexPage extends PureComponent {
       </button>
     );
 
+    const selectNodeText = (e)=> {
+      const range = document.createRange();
+      const selection = window.getSelection();
+      range.selectNodeContents(e.target);
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      if (document.queryCommandSupported('copy')) {
+        document.execCommand('copy');
+      }
+    };
+
     const Item = ({text})=> (
-      <p style={itemStyle}>
+      <p style={itemStyle}
+        onClick={selectNodeText}>
         <AutoLinkText text={text} />
       </p>
     );
