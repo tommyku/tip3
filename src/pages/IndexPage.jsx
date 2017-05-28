@@ -17,7 +17,9 @@ const itemStyle = {
   margin: 0,
   padding: '1em',
   borderBottom: '1px solid #999',
-  whiteSpace: 'pre'
+  whiteSpace: 'pre',
+  overflowY: 'auto',
+  maxWidth: '100%'
 }
 
 class IndexPage extends PureComponent {
