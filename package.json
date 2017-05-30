@@ -4,12 +4,14 @@
   "private": true,
   "dependencies": {
     "@hoodie/client": "^10.0.2",
+    "lodash.groupby": "^4.6.0",
     "pouchdb-browser": "^6.2.0",
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-autolink-text2": "^2.0.2",
     "react-dom": "^15.5.4",
     "react-router-dom": "^4.1.1",
+    "timeago.js": "^3.0.1",
     "uuid": "^3.0.1"
   },
   "homepage": "https://tip3.ck2ustudio.com/",

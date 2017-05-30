@@ -2,10 +2,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import AutoLinkText from 'react-autolink-text2';
-import AppBar from '../components/AppBar'
+import AppBar from '../components/AppBar';
+import groupBy from 'lodash.groupby';
+import timeago from 'timeago.js';
 
 const mainStyle = {
-  padding: '.5em'
 }
 
 const buttonBaseStyle = {
@@ -16,12 +17,21 @@ const buttonBaseStyle = {
 }
 
 const itemStyle = {
-  margin: 0,
-  padding: '1em',
-  borderBottom: '1px solid #999',
+  margin: '.5em auto',
+  padding: '1em .5em',
+  boxShadow: '0 0 4px #999, 0 2px 2px #999',
   whiteSpace: 'pre',
   overflowY: 'auto',
-  maxWidth: '100%'
+  maxWidth: '95vw'
+}
+
+const itemGroupTitleStyle = {
+  textTransform: 'uppercase',
+  fontSize: 'small',
+  fontWeight: 'bold',
+  color: '#999',
+  padding: '1em .5em',
+  margin: '1em 0'
 }
 
 class IndexPage extends PureComponent {
@@ -81,8 +91,8 @@ class IndexPage extends PureComponent {
       </p>
     );
 
-    const ItemList = ({items})=> (
-      <section>
+    const ItemGroup = ({items})=> (
+      <div>
         {
           items.map((item)=> {
             return (
@@ -92,8 +102,31 @@ class IndexPage extends PureComponent {
             )
           })
         }
-      </section>
+      </div>
     );
+
+    const ItemGroupTitle = ({name})=> (
+      <div style={itemGroupTitleStyle}>{name}</div>
+    );
+
+    const ItemList = ({items})=> {
+      const timeagoInstance = timeago();
+      let itemGroups = groupBy(items, (item)=> timeagoInstance.format(item.createdAt));
+      return (
+        <section>
+          {
+            Object.keys(itemGroups).map((key)=> {
+              return (
+                <section key={key}>
+                  <ItemGroupTitle name={key} />
+                  <ItemGroup items={itemGroups[key]} />
+                </section>
+              )
+            })
+          }
+        </section>
+      );
+    };
 
     return (
       <div>
