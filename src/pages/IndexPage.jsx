@@ -17,21 +17,22 @@ const buttonBaseStyle = {
 }
 
 const itemStyle = {
-  margin: '.5em auto',
+  margin: '1em auto',
   padding: '1em .5em',
   boxShadow: '0 0 4px #999, 0 2px 2px #999',
   whiteSpace: 'pre',
   overflowY: 'auto',
-  maxWidth: '95vw'
+  backgroundColor: '#fff',
+  color: '#222'
 }
 
 const itemGroupTitleStyle = {
   textTransform: 'uppercase',
   fontSize: 'small',
   fontWeight: 'bold',
-  color: '#999',
+  color: '#666',
   padding: '1em .5em',
-  margin: '1em 0'
+  margin: '.5em 0'
 }
 
 class IndexPage extends PureComponent {
